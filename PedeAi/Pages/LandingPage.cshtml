@@ -1,0 +1,30 @@
+﻿@page "/"
+@model LandingPageModel
+@{
+    ViewData["Title"] = "LandingPage";
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
+}
+
+<div>
+    <button class="card parceiro-card">
+        <span class="card-label">sou parceiro</span>
+    </button>
+    <div class="centered-content">
+        <div class="content">
+            <div class="logo-container">
+                <img src="~/images/pedeai.svg" alt="Logo" class="logo" />
+            </div>
+            <div class="button-container">
+                <form method="post">
+                    <button asp-page-handler="cliente" class="card parceiro-card"><span class="card-label">SOU CLIENTE</span></button>
+                <br />
+                    <button asp-page-handler="entregador" class="card parceiro-card"><span class="card-label">SOU ENTREGADOR</span></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

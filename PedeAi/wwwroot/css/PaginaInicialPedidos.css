@@ -1,0 +1,90 @@
+.pagina-inicial {
+    padding: 2rem;
+    color: #000;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+    margin: 0 8px;
+}
+
+.section {
+    margin-top: 2rem;
+}
+
+    .section h2 {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+.arrow {
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+}
+
+.carousel, .promotions {
+    overflow-x: auto;
+    white-space: nowrap;
+    scroll-behavior: smooth;
+    padding: 1rem 0;
+}
+
+.restaurant-card, .promo-card {
+    display: inline-block;
+    width: 180px;
+    height: 180px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    margin-right: 4rem;
+    overflow: hidden;
+    text-align: center;
+}
+
+    .restaurant-card img, .promo-card img {
+        width: clamp(80px, 20vw, 150px); /* responsive scaling */
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        display: block;
+    }
+
+    .restaurant-card p {
+        text-decoration: none !important; /* Remove underline */
+        margin: 8px 0 0; /* Adds some space above, less below */
+        font-weight: 600; /* Semi-bold for emphasis */
+        font-size: 1rem; /* Reasonable readable size */
+        color: #333; /* Dark gray color for better readability */
+        text-align: center; /* Center text under image */
+        white-space: nowrap; /* Prevent text wrapping */
+        overflow: hidden; /* Hide overflow */
+        text-overflow: ellipsis; /* Show "..." if text too long */
+        max-width: 180px; /* Optional: constrain width to keep layout tidy */
+    }
+
+.skeleton-card {
+    display: inline-block;
+    width: 180px;
+    height: 180px;
+    margin-right: 4rem;
+    background: linear-gradient(90deg, #eee, #ddd, #eee);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}

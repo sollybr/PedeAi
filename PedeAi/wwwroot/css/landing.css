@@ -1,0 +1,25 @@
+
+/* To center buttons and logo together */
+.content {
+text-align: center;
+}
+
+/* Logo styling */
+.logo-container {
+margin-top: 20px;
+}
+
+.logo {
+width: 232px;
+height: 232px;
+border-radius: 37px;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 768px) {
+.logo {
+    width: 150px;
+    height: 150px;
+}
+
+}
