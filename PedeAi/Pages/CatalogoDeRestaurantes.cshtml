@@ -7,6 +7,11 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/CatalogoRestaurante.css" asp-append-version="true" />
 }
+@section Scripts {
+    <script src="~/js/carrinho.js" asp-append-version="true"></script>
+}
+@using System.Text.Json
+
 
 <h1>@Model.RestauranteId</h1>
 
@@ -23,6 +28,11 @@
                         <h3>@produto.Nome</h3>
                         <p>@produto.Descricao</p>
                         <span class="preco">R$ @produto.Preco.ToString("F2")</span>
+                        <button onclick='addToCart(@Html.Raw(JsonSerializer.Serialize(new {
+                            produtoId = produto.IdProduto,
+                            nome = produto.Nome,
+                            preco = produto.Preco
+                        })))'>Adicionar ao Carrinho</button>
                     </div>
                 }
             </div>

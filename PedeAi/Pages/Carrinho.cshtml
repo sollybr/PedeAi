@@ -4,16 +4,36 @@
     ViewData["Title"] = "Carrinho";
     Layout = "_Layout";
 }
+@section Styles {
+    <link rel="stylesheet" href="~/css/Carrinho.css" asp-append-version="true" />
+}
 
-<h1>Seu Carrinho</h1>
-<p>Confira os itens adicionados antes de finalizar o pedido.</p>
+<h1>Resumo do Pedido</h1>
 
-<div class="carrinho-lista">
-    <ul>
-        <li>Pão com Ovo - R$5,00 <button class="btn btn-sm btn-danger">Remover</button></li>
-        <li>Café com Leite - R$3,50 <button class="btn btn-sm btn-danger">Remover</button></li>
-    </ul>
-    <div class="carrinho-total">Total: <strong>R$8,50</strong></div>
-    <button class="btn btn-primary">Finalizar Pedido</button>
+<div class="resumo-pedido">
+    <ul id="pedido-itens"></ul>
+    <div class="pedido-total">Total: <strong id="pedido-total">R$0,00</strong></div>
+
+    <form method="post" action="/FinalizarPedido">
+        <div class="form-group mt-3">
+            <label for="localEntrega">Local de Entrega:</label>
+            <select class="form-control" id="localEntrega" name="localEntrega" required>
+                <option value="">Selecione um local</option>
+                <option value="Bloco A - Sala 101">Bloco A - Sala 101</option>
+                <option value="Biblioteca UECE">Biblioteca UECE</option>
+                <option value="Cantina Central">Cantina Central</option>
+                <option value="Estacionamento Leste">Estacionamento Leste</option>
+            </select>
+        </div>
+
+        <input type="hidden" id="cartJson" name="cartJson" />
+
+        <button type="submit" class="btn btn-success mt-3">Confirmar Pedido</button>
+    </form>
 </div>
 
+<div class="confirmacao-pedido mt-5">
+    <p><strong>ID do Pedido:</strong> #12345</p>
+    <p><strong>Previsão de entrega:</strong> 15 minutos</p>
+    <a asp-page="/MonitorarPedidos" class="btn btn-outline-success">Acompanhar Pedido</a>
+</div>

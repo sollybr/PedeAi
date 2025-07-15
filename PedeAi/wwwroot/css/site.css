@@ -10,6 +10,35 @@ html, body {
     background-color: #fff; /* Optional: fallback color */
 }
 
+/* Fixed header */
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1030; /* high enough to sit above other content */
+}
+
+/* Fixed footer */
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 1030;
+    background-color: #f8f9fa; /* light background to match Bootstrap */
+    padding: 0.5rem 0;
+}
+
+/* Give space for the fixed header and footer */
+main {
+    padding-top: 70px; /* adjust if your header is taller */
+    padding-bottom: 60px; /* adjust if your footer is taller */
+}
+
+#navbar-logo {
+    max-height: 40px;
+    width: auto;
+}
+
 /* Shared card style */
 .card {
     width: 100%;
@@ -114,3 +143,39 @@ html, body {
         .button-container .btn:hover {
             background-color: #f0f0f0;
         }
+
+.cart-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.cart-popup {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0; 
+    z-index: 999;
+    background-color: white;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    min-width: 220px;
+}
+
+    .cart-popup.show {
+        display: block;
+    }
+
+    .cart-popup ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+    }
+
+.cart-popup-total {
+    margin-top: 8px;
+    font-weight: bold;
+    text-align: right;
+}
+

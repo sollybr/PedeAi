@@ -1,18 +1,20 @@
-/* CSS for Carrinho page */
-body {
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-}
-
-.container {
-    max-width: 1200px;
+.carrinho-lista {
+    max-width: 600px;
     margin: 0 auto;
-    padding: 20px;
 }
 
-h1 {
-    color: #333;
-}
+    .carrinho-lista ul {
+        list-style: none;
+        padding: 0;
+    }
 
+    .carrinho-lista li {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+    }
+
+.carrinho-total {
+    margin-top: 15px;
+    font-size: 1.2em;
+    text-align: right;
+}

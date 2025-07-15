@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using PedeAi.Contracts.DTO;
+
 using System.ComponentModel.DataAnnotations;
-using System.Data;
 using System.Security.Claims;
+
+using PedeAi.Contracts.DTO;
 
 namespace PedeAi.Pages
 {
