@@ -13,6 +13,11 @@ namespace PedeAi.Pages
             TempData["Role"] = "Cliente";
             return RedirectToPage("/Login");
         }
+        public IActionResult OnPostRestaurante()
+        {
+            TempData["Role"] = "Restaurante";
+            return RedirectToPage("/ProdutosRestaurante");
+        }
         public IActionResult OnPostEntregador()
         {
             TempData["Role"] = "Entregador";

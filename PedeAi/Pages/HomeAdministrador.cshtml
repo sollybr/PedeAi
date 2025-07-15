@@ -5,6 +5,12 @@
     Layout = "_Layout";
 }
 
-<h1>HomeAdministrador</h1>
-<p>This page corresponds to the UI frame: HomeAdministrador</p>
+<h1>Painel do Administrador</h1>
+<p>Gerencie os restaurantes, usuários e pedidos ativos da plataforma.</p>
+
+<div class="admin-dashboard">
+    <div><a asp-page="/CadastroRestaurante">+ Novo Restaurante</a></div>
+    <div><a asp-page="/MonitorarPedidos">📦 Monitorar Pedidos</a></div>
+    <div><a asp-page="/PerfilCliente">👥 Usuários</a></div>
+</div>
 

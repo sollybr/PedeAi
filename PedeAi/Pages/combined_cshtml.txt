@@ -1,0 +1,701 @@
+
+
+=== FILE: AtribuicaoDePedidos.cshtml ===
+
+@page "/AtribuicaoDePedidos"
+@model AtribuicaoDePedidosModel
+@{
+    ViewData["Title"] = "AtribuicaoDePedidos";
+    Layout = "_Layout";
+}
+
+<h1>AtribuicaoDePedidos</h1>
+<p>This page corresponds to the UI frame: AtribuicaoDePedidos</p>
+
+
+
+=== FILE: CadastroCliente.cshtml ===
+
+@page "/CadastroCliente"
+@model CadastroClienteModel
+@{
+    ViewData["Title"] = "CadastroCliente";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cadastro.css" />
+}
+
+<div class="login-wrapper">
+    <div class="login-content centered-content">
+        <div class="logo-container">
+            <img src="~/images/pedeai.svg" alt="Logo UECE" class="login-logo" />
+        </div>
+
+        <h1 class="login-title">CADASTRE-SE AQUI</h1>
+
+        <form method="post">
+            <div class="input-group">
+                <input asp-for="Email" class="input-card" placeholder="E-mail institucional" />
+            </div>
+
+            <div class="input-group">
+                <input asp-for="Senha" type="password" class="input-card" placeholder="Senha" />
+            </div>
+
+            <div class="input-group">
+                <input asp-for="ConfirmarSenha" type="password" class="input-card" placeholder="Confirmar senha" />
+            </div>
+
+            <button type="submit" class="login-button">CADASTRAR</button>
+        </form>
+
+        <div class="login-links">
+            <a asp-page="/Login" class="nav-link">JÁ TEM CONTA?<br /> FAÇA LOGIN</a>
+        </div>
+    </div>
+</div>
+
+
+=== FILE: CadastroRestaurante.cshtml ===
+
+@page "/CadastroRestaurante"
+@model CadastroRestauranteModel
+@{
+    ViewData["Title"] = "CadastroRestaurante";
+    Layout = "_Layout";
+}
+
+<h1>CadastroRestaurante</h1>
+<p>This page corresponds to the UI frame: CadastroRestaurante</p>
+
+
+
+=== FILE: Carrinho.cshtml ===
+
+@page "/Carrinho"
+@model CarrinhoModel
+@{
+    ViewData["Title"] = "Carrinho";
+    Layout = "_Layout";
+}
+
+<h1>Carrinho</h1>
+<p>This page corresponds to the UI frame: Carrinho</p>
+
+
+
+=== FILE: CatalogoDeRestaurantes.cshtml ===
+
+@page "/Catalogo"
+@model CatalogoDeRestaurantesModel
+@{
+    ViewData["Title"] = "Catalogo de Restaurante";
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/CatalogoRestaurante.css" asp-append-version="true" />
+}
+
+<h1>@Model.RestauranteId</h1>
+
+<div class="produto-container">
+    @foreach (var categoria in Model.ProdutosPorCategoria.Keys)
+    {
+        <div class="categoria-section">
+            <h2>@categoria</h2>
+            <div class="produtos-grid">
+                @foreach (var produto in Model.ProdutosPorCategoria[categoria])
+                {
+                    <div class="produto-card">
+                        <img src="@produto.ImagemUrl" alt="@produto.Nome" />
+                        <h3>@produto.Nome</h3>
+                        <p>@produto.Descricao</p>
+                        <span class="preco">R$ @produto.Preco.ToString("F2")</span>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
+
+=== FILE: ConclusaoPedido.cshtml ===
+
+@page "/ConclusaoPedido"
+@model ConclusaoPedidoModel
+@{
+    ViewData["Title"] = "ConclusaoPedido";
+    Layout = "_Layout";
+}
+
+<h1>ConclusaoPedido</h1>
+<p>This page corresponds to the UI frame: ConclusaoPedido</p>
+
+
+
+=== FILE: DetalhesPedido.cshtml ===
+
+@page "/DetalhesPedido"
+@model DetalhesPedidoModel
+@{
+    ViewData["Title"] = "Detalhes do Pedido";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="~/css/DetalhesPedido.css" asp-append-version="true" />
+}
+
+<h2>Pedido #@Model.PedidoId</h2>
+<div class="map-wrapper">
+    <div id="map"></div>
+</div>
+
+<div class="mt-3">
+    <button id="definirManualBtn" class="btn btn-secondary">Definir Localização Manualmente</button>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map;
+        let marcadorUsuario;
+        let userLat = null;
+        let userLng = null;
+
+        const fallbackLat = -3.786624;  // Coordenadas de fallback
+        const fallbackLng = -38.553138;
+
+        function inicializarMapa(lat, lng) {
+            map = L.map('map').setView([lat, lng], 18);
+
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://carto.com/">Carto</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
+            }).addTo(map);
+
+            atualizarMarcadorUsuario(lat, lng);
+
+            map.whenReady(() => map.invalidateSize());
+            window.addEventListener('load', () => setTimeout(() => map.invalidateSize(), 30));
+        }
+
+        function atualizarMarcadorUsuario(lat, lng) {
+            userLat = lat;
+            userLng = lng;
+
+            if (marcadorUsuario) {
+                marcadorUsuario.setLatLng([lat, lng]);
+            } else {
+                marcadorUsuario = L.marker([lat, lng], { draggable: false }).addTo(map)
+                    .bindPopup('Você está aqui').openPopup();
+            }
+
+            atualizarLinkRota();
+        }
+
+        // function atualizarLinkRota() {
+        //     const rotaURL = `https:www.google.com/maps/dir/?api=1&origin=${userLat},${userLng}&destination=${destinoLat},${destinoLng}&travelmode=walking`;
+        //     const link = document.getElementById('rotaLink');
+        //     if (link) {
+        //         link.href = rotaURL;
+        //         link.style.display = 'inline-block';
+        //     }
+        // }
+
+        function erroLocalizacao(err) {
+            console.warn("Erro de geolocalização:", err);
+            alert("Não foi possível obter sua localização automaticamente. Clique no botão abaixo para definir manualmente.");
+        }
+
+        document.getElementById('definirManualBtn').addEventListener('click', () => {
+            alert("Clique no mapa para definir sua localização.");
+            map.on('click', function (e) {
+                atualizarMarcadorUsuario(e.latlng.lat, e.latlng.lng);
+                map.off('click'); // só permite um clique
+            });
+        });
+
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    inicializarMapa(lat, lng);
+                    atualizarMarcadorUsuario(lat, lng);
+                },
+                err => {
+                    erroLocalizacao(err);
+                    inicializarMapa(fallbackLat, fallbackLng);
+                },
+                { timeout: 30 }
+            );
+        } else {
+            // alert("Seu navegador não suporta geolocalização.");
+            inicializarMapa(fallbackLat, fallbackLng);
+        }
+    </script>
+}
+
+
+=== FILE: Error.cshtml ===
+
+@page "/Error"
+@model ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<h1 class="text-danger">Error.</h1>
+<h2 class="text-danger">An error occurred while processing your request.</h2>
+
+@if (Model.ShowRequestId)
+{
+    <p>
+        <strong>Request ID:</strong> <code>@Model.RequestId</code>
+    </p>
+}
+
+<h3>Development Mode</h3>
+<p>
+    Swapping to the <strong>Development</strong> environment displays detailed information about the error that occurred.
+</p>
+<p>
+    <strong>The Development environment shouldn't be enabled for deployed applications.</strong>
+    It can result in displaying sensitive information from exceptions to end users.
+    For local debugging, enable the <strong>Development</strong> environment by setting the <strong>ASPNETCORE_ENVIRONMENT</strong> environment variable to <strong>Development</strong>
+    and restarting the app.
+</p>
+
+
+
+=== FILE: HomeAdministrador.cshtml ===
+
+@page "/HomeAdministrador"
+@model HomeAdministradorModel
+@{
+    ViewData["Title"] = "HomeAdministrador";
+    Layout = "_Layout";
+}
+
+<h1>HomeAdministrador</h1>
+<p>This page corresponds to the UI frame: HomeAdministrador</p>
+
+
+
+=== FILE: Index.cshtml ===
+
+@* @page *@
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Yo.</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">Potato Tomato</a>.</p>
+</div>
+
+
+
+=== FILE: LandingPage.cshtml ===
+
+@page "/"
+@model LandingPageModel
+@{
+    ViewData["Title"] = "LandingPage";
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/landing.css" asp-append-version="true" />
+}
+
+<div>
+    <button class="card parceiro-card">
+        <span class="card-label">sou parceiro</span>
+    </button>
+    <div class="centered-content">
+        <div class="content">
+            <div class="logo-container">
+                <img src="~/images/pedeai.svg" alt="Logo" class="logo" />
+            </div>
+            <div class="button-container">
+                <form method="post">
+                    <button asp-page-handler="cliente" class="card parceiro-card"><span class="card-label">SOU CLIENTE</span></button>
+                <br />
+                    <button asp-page-handler="entregador" class="card parceiro-card"><span class="card-label">SOU ENTREGADOR</span></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+=== FILE: Login.cshtml ===
+
+@page "/Login"
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+}
+
+<div class="login-wrapper">
+    <div class="login-content centered-content">
+        <div class="logo-container">
+            <img src="~/images/pedeai.svg" alt="PededAi" class="login-logo" />
+        </div>
+        <form method="post" novalidate>
+
+            <div class="input-group valid-input-group">
+                <input asp-for="Email" class="input-card" placeholder="E-mail" required />
+            </div>
+
+            <div class="input-group valid-input-group">
+                <input asp-for="Senha" type="password" class="input-card" placeholder="Senha" required />
+            </div>
+
+            <div class="text-danger validation-message">
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <div>@error.ErrorMessage</div>
+                }
+            </div>
+
+            <button type="submit" class="login-button">LOGIN</button>
+        </form>
+        <div class="login-links">
+            <a href="#" class="nav-link">ESQUECEU A SENHA?</a>
+            @if (TempData["Role"]?.Equals("Cliente") ?? false)
+            {
+                <form method="post" asp-page-handler="RedirectSignup">
+                    <button type="submit" class="nav-link">CADASTRE-SE</button>
+                </form>
+            }
+            else if (TempData["Role"]?.Equals("Entregador") ?? false)
+            {
+
+            }
+        </div>
+    </div>
+</div>
+
+
+=== FILE: LoginRestaurante.cshtml ===
+
+@page "/LoginRestaurante"
+@model LoginRestauranteModel
+@{
+    ViewData["Title"] = "LoginRestaurante";
+    Layout = "_Layout";
+}
+
+<h1>LoginRestaurante</h1>
+<p>This page corresponds to the UI frame: LoginRestaurante</p>
+
+
+
+=== FILE: Logout.cshtml ===
+
+@page "/Logout"
+@model LogoutModel
+@{
+    Layout = null; // optional: skip layout to make redirect faster
+}
+
+
+=== FILE: ModificarProduto.cshtml ===
+
+@page "/ModificarProduto"
+@model ModificarProdutoModel
+@{
+    ViewData["Title"] = "ModificarProduto";
+    Layout = "_Layout";
+}
+
+<h1>ModificarProduto</h1>
+<p>This page corresponds to the UI frame: ModificarProduto</p>
+
+
+
+=== FILE: MonitorarPedidos.cshtml ===
+
+@page "/MonitorarPedidos"
+@model MonitorarPedidosModel
+@{
+    ViewData["Title"] = "MonitorarPedidos";
+    Layout = "_Layout";
+}
+
+<h1>MonitorarPedidos</h1>
+<p>This page corresponds to the UI frame: MonitorarPedidos</p>
+
+
+
+=== FILE: NotificacoesCliente.cshtml ===
+
+@page "/NotificacoesCliente"
+@model NotificacoesClienteModel
+@{
+    ViewData["Title"] = "NotificacoesCliente";
+    Layout = "_Layout";
+}
+
+<h1>NotificacoesCliente</h1>
+<p>This page corresponds to the UI frame: NotificacoesCliente</p>
+
+
+
+=== FILE: PaginaInicialCliente.cshtml ===
+
+@page "/Inicio"
+@model PaginaInicialClienteModel
+@{
+    ViewData["Title"] = "PaginaInicialCliente";
+    Layout = "_Layout";
+}
+
+@section Scripts {
+    <script src="~/js/inicio.js?v=@DateTime.Now.Ticks"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/PaginaInicialPedidos.css?v=@DateTime.Now.Ticks" />
+}
+
+<section class="pagina-inicial">
+    <div class="header">
+        <div class="title">
+            <h1>PEDE AÍ!</h1>
+        </div>
+    </div>
+    <br />
+    <div class="section">
+        <h2>RESTAURANTES <span class="arrow">?</span></h2>
+        <div class="carousel" id="restaurante-carousel">
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>PROMOÇÕES <span class="arrow">?</span></h2>
+        <div class="promotions">
+            @for (int i = 0; i < 4; i++)
+            {
+                <div class="promo-card">
+                    <img src="/images/placeholder.png" alt="Promoção" />
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+
+=== FILE: PedidosEntregador.cshtml ===
+
+@page "/Pedidos"
+@model PedidosEntregadorModel
+@{
+    ViewData["Title"] = "PedidosEntregador";
+    Layout = "_Layout";
+}
+
+<h1>PedidosEntregador</h1>
+<p>This page corresponds to the UI frame: PedidosEntregador</p>
+
+
+
+=== FILE: PerfilCliente.cshtml ===
+
+@page "/PerfilCliente"
+@model PerfilClienteModel
+@{
+    ViewData["Title"] = "PerfilCliente";
+    Layout = "_Layout";
+}
+
+<h1>PerfilCliente</h1>
+<p>This page corresponds to the UI frame: PerfilCliente</p>
+
+
+
+=== FILE: PerfilRestaurante.cshtml ===
+
+@page "/PerfilRestaurante"
+@model PerfilRestauranteModel
+@{
+    ViewData["Title"] = "PerfilRestaurante";
+    Layout = "_Layout";
+}
+
+<h1>PerfilRestaurante</h1>
+<p>This page corresponds to the UI frame: PerfilRestaurante</p>
+
+
+
+=== FILE: Privacy.cshtml ===
+
+@page "/Privacy"
+@model PrivacyModel
+@{
+    ViewData["Title"] = "Política de Privacidade";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Esta Política de Privacidade descreve como coletamos, usamos, armazenamos e protegemos as informações pessoais dos usuários, restaurantes, entregadores e demais participantes do aplicativo <strong>PedeAí</strong>, voltado para pedidos de refeições em ambientes universitários.</p>
+
+<h2>1. Coleta de Dados</h2>
+<p>Coletamos as seguintes informações ao utilizar o app:</p>
+
+<h3>1.1 Dados de Usuários</h3>
+<ul>
+    <li>Nome completo</li>
+    <li>E-mail universitário</li>
+    <li>Senha (armazenada de forma criptografada)</li>
+    <li>Telefone (opcional)</li>
+    <li>Matrícula</li>
+    <li>Endereços de entrega (bloco, sala, complemento)</li>
+</ul>
+
+<h3>1.2 Dados de Restaurantes</h3>
+<ul>
+    <li>Nome do restaurante</li>
+    <li>CNPJ</li>
+    <li>E-mail de contato</li>
+    <li>Senha (armazenada de forma criptografada)</li>
+    <li>Telefone</li>
+    <li>Horário de funcionamento</li>
+    <li>Categorias associadas</li>
+</ul>
+
+<h3>1.3 Dados de Entregadores</h3>
+<ul>
+    <li>Nome completo</li>
+    <li>CPF</li>
+    <li>E-mail</li>
+    <li>Senha (armazenada de forma criptografada)</li>
+    <li>Telefone</li>
+    <li>Restaurante vinculado</li>
+</ul>
+
+<h3>1.4 Dados de Pedidos</h3>
+<ul>
+    <li>Itens do pedido (produtos, quantidades e preços)</li>
+    <li>Forma de pagamento (cartão, dinheiro ou pix)</li>
+    <li>Endereço de entrega</li>
+    <li>Status do pedido</li>
+    <li>Avaliações e comentários</li>
+</ul>
+
+<h2>2. Uso dos Dados</h2>
+<p>As informações são utilizadas para:</p>
+<ul>
+    <li>Processar e gerenciar pedidos de comida;</li>
+    <li>Comunicar usuários, entregadores e restaurantes;</li>
+    <li>Garantir a segurança e integridade das operações;</li>
+    <li>Permitir avaliações e feedbacks;</li>
+    <li>Melhorar a experiência do usuário.</li>
+</ul>
+
+<h2>3. Compartilhamento de Dados</h2>
+<p>Seus dados <strong>não são vendidos ou repassados a terceiros</strong>, exceto nos seguintes casos:</p>
+<ul>
+    <li>Para entregadores, os dados necessários à entrega (nome, endereço de entrega);</li>
+    <li>Quando exigido por lei ou ordem judicial;</li>
+    <li>Para fins acadêmicos de análise, com os dados anonimizados.</li>
+</ul>
+
+<h2>4. Segurança dos Dados</h2>
+<p>Implementamos medidas técnicas e organizacionais para proteger os dados:</p>
+<ul>
+    <li>Criptografia de senhas;</li>
+    <li>Controle de acesso aos dados por perfis (usuário, restaurante, entregador);</li>
+    <li>Backup periódico do banco de dados;</li>
+    <li>Armazenamento seguro dos dados em servidores protegidos.</li>
+</ul>
+
+<h2>5. Retenção de Dados</h2>
+<p>Os dados são armazenados enquanto a conta estiver ativa ou conforme exigido por obrigações legais e acadêmicas. O usuário pode solicitar a exclusão dos dados a qualquer momento, sujeita à análise.</p>
+
+<h2>6. Direitos do Titular</h2>
+<p>Você tem direito a:</p>
+<ul>
+    <li>Acessar os dados pessoais armazenados;</li>
+    <li>Corrigir informações incorretas;</li>
+    <li>Solicitar a exclusão dos dados;</li>
+    <li>Revogar o consentimento para uso de dados, conforme a LGPD (Lei Geral de Proteção de Dados - Brasil).</li>
+</ul>
+
+<h2>7. Alterações na Política</h2>
+<p>Esta política pode ser atualizada periodicamente. Notificaremos os usuários sempre que houver alterações significativas.</p>
+
+
+
+
+=== FILE: Produto.cshtml ===
+
+@page "/Produto"
+@model ProdutoModel
+@{
+    ViewData["Title"] = "Produto";
+    Layout = "_Layout";
+}
+
+<h1>Produto</h1>
+<p>This page corresponds to the UI frame: Produto</p>
+
+
+
+=== FILE: RecuperacaoDeAcesso.cshtml ===
+
+@page "/RecuperacaoDeAcesso"
+@model RecuperacaoDeAcessoModel
+@{
+    ViewData["Title"] = "RecuperacaoDeAcesso";
+    Layout = "_Layout";
+}
+
+<h1>RecuperacaoDeAcesso</h1>
+<p>This page corresponds to the UI frame: RecuperacaoDeAcesso</p>
+
+
+
+=== FILE: RestauranteProdutos.cshtml ===
+
+@page "/RestauranteProdutos"
+@model RestauranteProdutosModel
+@{
+    ViewData["Title"] = "RestauranteProdutos";
+    Layout = "_Layout";
+}
+
+<form method="post">
+    <!-- Content goes here -->
+</form>
+
+
+
+=== FILE: _ViewImports.cshtml ===
+
+@using PedeAi
+@* @using InterfacesPedeAi *@
+@namespace PedeAi.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+
+=== FILE: _ViewStart.cshtml ===
+
+
+@{
+    Layout = "_Layout";
+}
+

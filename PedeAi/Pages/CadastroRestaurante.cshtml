@@ -5,6 +5,14 @@
     Layout = "_Layout";
 }
 
-<h1>CadastroRestaurante</h1>
-<p>This page corresponds to the UI frame: CadastroRestaurante</p>
+<h1>Cadastro de Restaurante</h1>
+<p>Cadastre seu restaurante para começar a vender no PedeAí.</p>
+
+<form method="post" class="cadastro-form">
+    <div class="input-group"><input asp-for="Nome" placeholder="Nome do Restaurante" /></div>
+    <div class="input-group"><input asp-for="CNPJ" placeholder="CNPJ" /></div>
+    <div class="input-group"><input asp-for="Email" placeholder="Email" /></div>
+    <div class="input-group"><input asp-for="Senha" type="password" placeholder="Senha" /></div>
+    <button type="submit" class="btn btn-success">Cadastrar Restaurante</button>
+</form>
 

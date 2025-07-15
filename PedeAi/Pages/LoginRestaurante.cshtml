@@ -5,6 +5,13 @@
     Layout = "_Layout";
 }
 
-<h1>LoginRestaurante</h1>
-<p>This page corresponds to the UI frame: LoginRestaurante</p>
+<h1>Login do Restaurante</h1>
+<p>Acesse o painel de controle do seu restaurante.</p>
+
+<form method="post">
+    <div class="input-group"><input asp-for="Email" placeholder="Email" /></div>
+    <div class="input-group"><input asp-for="Senha" type="password" placeholder="Senha" /></div>
+    <button class="btn btn-warning">Entrar</button>
+</form>
+<p><a asp-page="/RecuperacaoDeAcesso">Esqueceu sua senha?</a></p>
 

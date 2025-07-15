@@ -5,6 +5,10 @@
     Layout = "_Layout";
 }
 
-<h1>RecuperacaoDeAcesso</h1>
-<p>This page corresponds to the UI frame: RecuperacaoDeAcesso</p>
+<h1>Recuperar Acesso</h1>
+<p>Informe seu email para receber instruções de redefinição de senha.</p>
 
+<form method="post">
+    <div class="input-group"><input asp-for="Email" placeholder="Email institucional" /></div>
+    <button type="submit" class="btn btn-info">Enviar</button>
+</form>

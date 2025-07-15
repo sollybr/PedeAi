@@ -5,6 +5,13 @@
     Layout = "_Layout";
 }
 
-<h1>ModificarProduto</h1>
-<p>This page corresponds to the UI frame: ModificarProduto</p>
+<h1>Modificar Produto</h1>
+<p>Edite os detalhes de um produto do cardápio.</p>
+
+<form method="post">
+    <div class="input-group"><input asp-for="Nome" placeholder="Nome do Produto" /></div>
+    <div class="input-group"><input asp-for="Preco" placeholder="Preço" /></div>
+    <div class="input-group"><input asp-for="Descricao" placeholder="Descrição" /></div>
+    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+</form>
 

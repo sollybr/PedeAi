@@ -39,7 +39,6 @@ namespace PedeAi.Pages
 
         private async Task<IActionResult> SignOutAndRedirectAsync(PathString path)
         {
-            // Pure logic: preserve role before side effect
             if (UserRole is not null)
                 TempData["Role"] = UserRole;
 
@@ -62,7 +61,9 @@ namespace PedeAi.Pages
         }
 
         private Task<IActionResult?> ValidateLogin(string? role) =>
-            User.Identity?.IsAuthenticated == true && UserEmail is not null && !string.IsNullOrWhiteSpace(role)
+            User.Identity?.IsAuthenticated ?? false &&
+            UserEmail is not null && 
+            !string.IsNullOrWhiteSpace(role)
                 ? Task.FromResult<IActionResult?>(RedirectByUserRole(role))
                 : Task.FromResult<IActionResult?>(null);
 

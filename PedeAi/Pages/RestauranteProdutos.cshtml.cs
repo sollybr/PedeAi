@@ -17,9 +17,9 @@ namespace PedeAi.Pages
         {
             return role switch
             {
-                "Cliente" => Page(),
+                "Cliente" => RedirectToPage("/PaginaInicialCliente"),
                 "Entregador" => RedirectToPage("/PedidosEntregador"),
-                "Restaurante" => RedirectToPage("/RestauranteProdutos"),
+                "Restaurante" => Page(),
                 _ => RedirectToPage("/Error")
             };
         }

@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-
+using PedeAi.Contracts.DTO;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Security.Claims;
@@ -26,11 +26,16 @@ namespace PedeAi.Pages
         [Required(ErrorMessage = "A senha é obrigatória.")]
         public required string Senha { get; set; }
 
+        private string Name { get; set; }
+        private int UserId { get; set; }
+
         private async Task SetPerms(string TypePerms)
         {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, Email),
+                new Claim(ClaimTypes.Name, Name),
+                new Claim(ClaimTypes.NameIdentifier, UserId.ToString()),
                 new Claim(ClaimTypes.Role, TypePerms)
             };
 
@@ -44,9 +49,15 @@ namespace PedeAi.Pages
         {
             if (!ModelState.IsValid)
                 return Page();
-
+            var role = TempData["Role"]?.ToString();
+            var apiUrl = role switch
+            {
+                "Cliente" => "https://localhost:7142/api/usuario",
+                "Entregador" => "https://localhost:7142/api/entregador",
+                _ => string.Empty
+            };
             var client = _httpClientFactory.CreateClient();
-            var response = await client.PostAsJsonAsync("https://localhost:7142/api/usuario/login", new
+            var response = await client.PostAsJsonAsync(apiUrl + "/login", new
             {
                 Email,
                 Senha
@@ -65,10 +76,19 @@ namespace PedeAi.Pages
                 ModelState.AddModelError(string.Empty, "Erro ao autenticar.");
                 return Page();
             }
+            response = await client.PostAsJsonAsync(apiUrl + "/PegarId", new
+            {
+                Email,
+                Senha
+            });
+            UserId = await response.Content.ReadFromJsonAsync<int>();
+            response = await client.PostAsJsonAsync(apiUrl + "/PegarDados", UserId);
+            var dto = await response.Content.ReadFromJsonAsync<DadosUsuarioDto>();
+            Name = dto?.Nome ?? "Usuário";
 
-            await SetPerms(UserRole);
+            await SetPerms(role);
 
-            return UserRole switch
+            return role switch
             {
                 "Cliente" => RedirectToPage("/PaginaInicialCliente"),
                 "Entregador" => RedirectToPage("/PedidosEntregador"),
