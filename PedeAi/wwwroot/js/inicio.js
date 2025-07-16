@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const input = document.createElement('input');
                 input.type = 'hidden';
                 input.name = 'restauranteId';
-                input.value = restaurante.id;
+                input.value = restaurante.idRestaurante;
 
                 form.appendChild(input);
 

@@ -12,7 +12,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/site.js" asp-append-version="true"></script>
 </head>
 <body>
     <div class="layout-wrapper d-flex flex-column min-vh-100">
@@ -23,6 +23,19 @@
                     <a class="navbar-brand" asp-area="" asp-page="/LandingPage">
                         <img src="~/images/pedeai.svg" alt="PedeAi" id="navbar-logo" class="login-logo" />
                     </a>
+
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <form method="post" asp-page="/Logout" class="logout-form">
+                                    <button type="submit" class="nav-link btn btn-link text-dark">Sair</button>
+                                </form>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Profile">Profile</a>
+                            </li>
+                        </ul>
+                    </div>
 
                     @if (User.Identity?.IsAuthenticated ?? false)
                     {
@@ -43,19 +56,6 @@
                             aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-
-                    <div class="collapse navbar-collapse" id="navbarNav">
-                        <ul class="navbar-nav ms-auto">
-                            <li class="nav-item">
-                                <form method="post" asp-page="/Logout" class="logout-form">
-                                    <button type="submit" class="nav-link btn btn-link text-dark">Sair</button>
-                                </form>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/Profile">Profile</a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
             </nav>
         </header>

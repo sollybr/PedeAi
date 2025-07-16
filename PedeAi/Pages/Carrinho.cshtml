@@ -19,10 +19,10 @@
             <label for="localEntrega">Local de Entrega:</label>
             <select class="form-control" id="localEntrega" name="localEntrega" required>
                 <option value="">Selecione um local</option>
-                <option value="Bloco A - Sala 101">Bloco A - Sala 101</option>
-                <option value="Biblioteca UECE">Biblioteca UECE</option>
-                <option value="Cantina Central">Cantina Central</option>
-                <option value="Estacionamento Leste">Estacionamento Leste</option>
+                @foreach (var endereco in Model.Enderecos)
+                {
+                    <option value="@endereco.Id">@endereco.Nome</option>
+                }
             </select>
         </div>
 
